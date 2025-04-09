@@ -25,13 +25,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Búsquedas del clima
-    Route::get('/searches',         [SearchController::class, 'index']);     // Listar búsquedas
-    Route::post('/searches',        [SearchController::class, 'store']);     // Crear nueva búsqueda
-    Route::get('/searches/{id}',    [SearchController::class, 'show']);      // Ver una búsqueda
-    Route::put('/searches/{id}',    [SearchController::class, 'update']);    // Actualizar ciudad
-    Route::delete('/searches/{id}', [SearchController::class, 'destroy']);   // Eliminar búsqueda
+    Route::get('/searches',           [SearchController::class, 'index']);      // Listar búsquedas
+    Route::post('/searches',          [SearchController::class, 'store']);      // Crear nueva búsqueda
+    Route::get('/searches/{id}',      [SearchController::class, 'show']);       // Ver una búsqueda
+    Route::put('/searches/{id}',      [SearchController::class, 'update']);     // Actualizar ciudad
+    Route::delete('/searches/{id}',   [SearchController::class, 'destroy']);    // Eliminar búsqueda
 
     // Favoritos
-    Route::get('/favorites',            [FavoriteController::class, 'index']);         // Obtener favoritos
-    Route::post('/favorites/{id}/toggle', [FavoriteController::class, 'toggleFavorite']); // Alternar favorito
+    Route::get('/favorites',                  [FavoriteController::class, 'index']);          // Obtener favoritos
+    Route::post('/favorites/{id}/toggle',     [FavoriteController::class, 'toggleFavorite']); // Alternar favorito
 });
