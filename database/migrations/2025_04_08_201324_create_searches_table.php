@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('searches', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->id();
             $table->string('city');
             $table->json('data'); // Respuesta completa de WeatherAPI
             $table->boolean('favorite')->default(false);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
