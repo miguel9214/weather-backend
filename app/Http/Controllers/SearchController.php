@@ -16,6 +16,24 @@ class SearchController extends Controller
     {
         $this->weatherService = $weatherService;
     }
+
+        /**
+     * @OA\Get(
+     *     path="/api/searches",
+     *     summary="Listar todas las búsquedas del usuario autenticado",
+     *     tags={"Searches"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de búsquedas",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Búsquedas recuperadas exitosamente"),
+     *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
+     *         )
+     *     )
+     * )
+     */
+
     public function index(Request $request)
     {
         try {
@@ -33,7 +51,33 @@ class SearchController extends Controller
             ], 500);
         }
     }
-
+/**
+     * @OA\Post(
+     *     path="/api/searches",
+     *     summary="Crear una nueva búsqueda",
+     *     tags={"Searches"},
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"city"},
+     *             @OA\Property(property="city", type="string", example="Madrid")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Búsqueda creada exitosamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Búsqueda creada"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error al obtener el clima"
+     *     )
+     * )
+     */
     public function store(SearchRequest $request)
     {
         try {
@@ -64,6 +108,34 @@ class SearchController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/searches/{id}",
+     *     summary="Mostrar una búsqueda específica",
+     *     tags={"Searches"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID de la búsqueda",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Búsqueda encontrada",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Búsqueda encontrada"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Búsqueda no encontrada"
+     *     )
+     * )
+     */
+
     public function show(Request $request, $id)
     {
         try {
@@ -81,6 +153,41 @@ class SearchController extends Controller
             ], 404);
         }
     }
+
+    /**
+     * @OA\Put(
+     *     path="/api/searches/{id}",
+     *     summary="Actualizar una búsqueda",
+     *     tags={"Searches"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID de la búsqueda a actualizar",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"city"},
+     *             @OA\Property(property="city", type="string", example="Lima")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Búsqueda actualizada exitosamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Búsqueda actualizada"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error al actualizar"
+     *     )
+     * )
+     */
 
     public function update(SearchRequest $request, $id)
     {
@@ -100,6 +207,33 @@ class SearchController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/searches/{id}",
+     *     summary="Eliminar una búsqueda",
+     *     tags={"Searches"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID de la búsqueda a eliminar",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Búsqueda eliminada",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Búsqueda eliminada")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error al eliminar"
+     *     )
+     * )
+     */
 
     public function destroy(Request $request, $id)
     {

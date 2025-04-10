@@ -1,66 +1,219 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 🌦️ Weather API - Laravel Backend
 
-## About Laravel
+Este proyecto es una **API RESTful** desarrollada en **Laravel 10** que permite a los usuarios consultar el clima de distintas ciudades, guardar búsquedas, marcarlas como favoritas, y gestionar usuarios con autenticación y control de roles.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📌 Requisitos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP >= 8.1
+- Composer
+- Laravel 10
+- MySQL o PostgreSQL
+- Laragon (recomendado) o `php artisan serve`
+- API Key de [WeatherAPI](https://www.weatherapi.com/)
+- Node.js (opcional, si se desea compilar assets en proyectos complementarios)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🚀 Tecnologías utilizadas
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+| Tecnología               | Descripción |
+|--------------------------|-------------|
+| **Laravel 10**           | Framework principal backend |
+| **Laravel Sanctum**      | Autenticación por tokens |
+| **Spatie Permissions**   | Gestión de roles y permisos |
+| **WeatherAPI**           | Servicio externo de datos meteorológicos |
+| **Swagger (l5-swagger)** | Documentación automática de la API |
+| **PHPUnit**              | Pruebas unitarias y de características |
+| **MySQL**                | Base de datos relacional |
+| **Laragon**              | Entorno local recomendado |
+| **Postman / Swagger UI** | Testeo de endpoints |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 📂 Estructura del proyecto
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   ├── Requests/
+├── Models/
+├── Service/
+│   └── WeatherService.php
+├── Providers/
+routes/
+├── api.php
+database/
+├── migrations/
+├── seeders/
+tests/
+```
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 🔧 Instalación y configuración
 
-## Contributing
+### 1. Clonar el repositorio
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+git clone https://github.com/miguel9214/weather-backend.git
+cd weather-backend
+```
 
-## Code of Conduct
+### 2. Instalar dependencias
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer install
+```
 
-## Security Vulnerabilities
+### 3. Configurar el entorno
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## License
+### 4. Configurar variables en `.env`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+DB_DATABASE=weather_backend
+DB_USERNAME=root
+DB_PASSWORD=
+
+WEATHER_API_KEY=tu_api_key_de_weatherapi
+
+L5_SWAGGER_CONST_HOST=http://weather-backend.test
+```
+
+### 5. Crear la base de datos
+
+Desde Laragon, crear una base de datos llamada `weather_backend`.
+
+### 6. Ejecutar migraciones y seeders
+
+```bash
+php artisan migrate --seed
+```
+
+📌 Esto ejecutará el seeder `RoleSeeder` necesario para el registro inicial de usuarios con rol (`admin`, `user`).
+
+---
+
+## 🧪 Ejecutar el servidor
+
+Con **Laragon**, accedé desde:
+
+```
+http://weather-backend.test
+```
+
+O ejecutá el servidor embebido:
+
+```bash
+php artisan serve
+```
+
+---
+
+## ✅ Registro y login
+
+Para registrarse correctamente, se requiere un rol existente (`user` o `admin`). Estos roles se insertan automáticamente al ejecutar el seeder.
+
+### Headers requeridos para rutas protegidas
+
+```
+Accept: application/json
+Authorization: Bearer {token}
+```
+
+---
+
+## 🧭 Endpoints principales
+
+| Método | Ruta                        | Descripción |
+|--------|-----------------------------|-------------|
+| POST   | `/api/register`             | Registro de usuario |
+| POST   | `/api/login`                | Login de usuario |
+| POST   | `/api/logout`               | Logout del usuario autenticado |
+| GET    | `/api/weather`              | Consulta de clima (`city` como parámetro) |
+| GET    | `/api/searches`             | Listado de búsquedas del usuario |
+| POST   | `/api/searches`             | Crear nueva búsqueda |
+| GET    | `/api/searches/{id}`        | Obtener una búsqueda específica |
+| PUT    | `/api/searches/{id}`        | Actualizar ciudad de una búsqueda |
+| DELETE | `/api/searches/{id}`        | Eliminar una búsqueda |
+| GET    | `/api/favorites`            | Listado de búsquedas favoritas |
+| PATCH  | `/api/favorites/{id}`       | Marcar o desmarcar como favorito |
+
+---
+
+## 📚 Documentación Swagger
+
+La API está documentada automáticamente usando `l5-swagger`.
+
+### Generar la documentación:
+
+```bash
+php artisan l5-swagger:generate
+```
+
+### Visualizar la documentación:
+
+```
+http://weather-backend.test/api/documentation
+```
+
+---
+
+## 🧪 Pruebas Automatizadas
+
+Incluye pruebas para:
+
+- Registro y autenticación de usuarios
+- Verificación de roles y permisos
+- Búsqueda de clima y gestión de historial
+- Marcado como favoritos
+- Servicios independientes como `WeatherService`
+
+### Ejecutar pruebas:
+
+```bash
+php artisan test
+```
+
+---
+
+## 🔐 Roles incluidos
+
+El sistema usa el paquete `spatie/laravel-permission` y define los siguientes roles por defecto:
+
+- `admin`
+- `user`
+
+Se insertan automáticamente con el seeder `RoleSeeder`.
+
+---
+
+## 🧩 Frontend asociado
+
+Este backend está pensado para ser consumido por un frontend en **Vue.js 3 (Vite + Bootstrap + Vue Router + SweetAlert)**, que usa un composable `use-api.js` para centralizar todas las peticiones.
+
+Link de repositorio
+
+Clonar
+
+https://github.com/miguel9214/weather-frontend.git
+
+
+ejecutar npm i y luego npm run dev
+---
+
+## 👨‍💻 Autor
+
+Desarrollado por Miguel Ramos como parte de una Prueba Técnica Senior Laravel para la empresa Pulpo Online.
+
+📫 Contacto: [miguel921433@gmail.com]
+
+---

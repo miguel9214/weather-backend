@@ -15,7 +15,37 @@ class WeatherController extends Controller
     {
         $this->weatherService = $weatherService;
     }
-
+/**
+     * @OA\Get(
+     *     path="/api/weather",
+     *     summary="Obtener el clima de una ciudad",
+     *     tags={"Weather"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="city",
+     *         in="query",
+     *         required=true,
+     *         description="Nombre de la ciudad",
+     *         @OA\Schema(type="string", example="Buenos Aires")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Datos climáticos recuperados",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Clima obtenido exitosamente"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Parámetro de ciudad faltante o inválido"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error al obtener el clima"
+     *     )
+     * )
+     */
     public function getWeather(Request $request)
     {
         $request->validate(['city' => 'required|string']);
