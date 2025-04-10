@@ -16,21 +16,20 @@ class SearchController extends Controller
     {
         $this->weatherService = $weatherService;
     }
-
     public function index(Request $request)
     {
         try {
             $searches = $request->user()->searches()->latest()->get();
 
             return response()->json([
-                'message' => 'Searches retrieved successfully',
+                'message' => __('messages.searches_retrieved'),
                 'data' => $searches
-            ]);
+            ], 200);
         } catch (Exception $e) {
             Log::error('Error fetching searches: ' . $e->getMessage());
 
             return response()->json([
-                'message' => 'An error occurred while retrieving searches'
+                'message' => __('messages.searches_fetch_error')
             ], 500);
         }
     }
@@ -40,6 +39,12 @@ class SearchController extends Controller
         try {
             $data = $this->weatherService->getWeather($request->city);
 
+            if (!$data || !is_array($data)) {
+                return response()->json([
+                    'message' => __('messages.weather_not_retrieved')
+                ], 422);
+            }
+
             $search = $request->user()->searches()->create([
                 'city'     => $request->city,
                 'data'     => $data,
@@ -47,14 +52,14 @@ class SearchController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'Search created successfully',
+                'message' => __('messages.search_created'),
                 'data' => $search
             ], 201);
         } catch (Exception $e) {
             Log::error('Error storing search: ' . $e->getMessage());
 
             return response()->json([
-                'message' => 'An error occurred while creating the search'
+                'message' => __('messages.search_create_error')
             ], 500);
         }
     }
@@ -65,14 +70,14 @@ class SearchController extends Controller
             $search = $request->user()->searches()->findOrFail($id);
 
             return response()->json([
-                'message' => 'Search retrieved successfully',
+                'message' => __('messages.search_retrieved'),
                 'data' => $search
-            ]);
+            ], 200);
         } catch (Exception $e) {
             Log::error("Error showing search (ID: $id): " . $e->getMessage());
 
             return response()->json([
-                'message' => 'Search not found'
+                'message' => __('messages.search_not_found')
             ], 404);
         }
     }
@@ -84,14 +89,14 @@ class SearchController extends Controller
             $search->update(['city' => $request->city]);
 
             return response()->json([
-                'message' => 'Search updated successfully',
+                'message' => __('messages.search_updated'),
                 'data' => $search
-            ]);
+            ], 200);
         } catch (Exception $e) {
             Log::error("Error updating search (ID: $id): " . $e->getMessage());
 
             return response()->json([
-                'message' => 'An error occurred while updating the search'
+                'message' => __('messages.search_update_error')
             ], 500);
         }
     }
@@ -103,13 +108,13 @@ class SearchController extends Controller
             $search->delete();
 
             return response()->json([
-                'message' => 'Search deleted successfully'
-            ]);
+                'message' => __('messages.search_deleted')
+            ], 200);
         } catch (Exception $e) {
             Log::error("Error deleting search (ID: $id): " . $e->getMessage());
 
             return response()->json([
-                'message' => 'An error occurred while deleting the search'
+                'message' => __('messages.search_delete_error')
             ], 500);
         }
     }

@@ -19,7 +19,9 @@ class FavoriteController extends Controller
             return response()->json($favorites);
         } catch (Exception $e) {
             Log::error('Error fetching favorites: ' . $e->getMessage());
-            return response()->json(['message' => 'Error fetching favorites'], 500);
+            return response()->json([
+                'message' => __('messages.favorites_error')
+            ], 500);
         }
     }
 
@@ -31,12 +33,16 @@ class FavoriteController extends Controller
             $search->save();
 
             return response()->json([
-                'message' => $search->favorite ? 'Marked as favorite' : 'Removed from favorites',
-                'search'  => $search,
+                'message' => $search->favorite
+                    ? __('messages.favorite_marked')
+                    : __('messages.favorite_removed'),
+                'search' => $search,
             ]);
         } catch (Exception $e) {
             Log::error("Error toggling favorite: " . $e->getMessage());
-            return response()->json(['message' => 'Error updating favorite status'], 500);
+            return response()->json([
+                'message' => __('messages.favorite_toggle_error')
+            ], 500);
         }
     }
 }

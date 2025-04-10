@@ -13,7 +13,6 @@ use Exception;
 
 class AuthController extends Controller
 {
-
     public function register(RegisterRequest $request)
     {
         try {
@@ -24,32 +23,30 @@ class AuthController extends Controller
                 'locale'   => $request->locale ?? 'en',
             ]);
 
-            // Asignar rol (user/admin)
             $role = $request->role ?? 'user';
 
-            // Verificamos que el rol exista antes de asignar
-            if (!\Spatie\Permission\Models\Role::where('name', $role)->exists()) {
+            if (!Role::where('name', $role)->exists()) {
                 Log::error("El rol '{$role}' no existe.");
-                return response()->json(['message' => "Rol '{$role}' no existe"], 400);
+                return response()->json([
+                    'message' => __('messages.role_not_found', ['role' => $role])
+                ], 400);
             }
 
             $user->assignRole($role);
-
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
-                'message' => 'User registered successfully',
+                'message' => __('messages.user_registered'),
                 'user'    => $user,
                 'token'   => $token,
             ], 201);
         } catch (Exception $e) {
             Log::error('Register error: ' . $e->getMessage());
-            return response()->json(['message' => 'Error registering user'], 500);
+            return response()->json([
+                'message' => __('messages.register_error')
+            ], 500);
         }
     }
-
-
-
 
     public function login(LoginRequest $request)
     {
@@ -57,19 +54,23 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->first();
 
             if (! $user || ! Hash::check($request->password, $user->password)) {
-                return response()->json(['message' => 'Invalid credentials'], 401);
+                return response()->json([
+                    'message' => __('messages.invalid_credentials')
+                ], 401);
             }
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
-                'message' => 'Login successful',
+                'message' => __('messages.login_successful'),
                 'user'    => $user,
                 'token'   => $token,
             ]);
         } catch (Exception $e) {
             Log::error('Login error: ' . $e->getMessage());
-            return response()->json(['message' => 'Error during login'], 500);
+            return response()->json([
+                'message' => __('messages.login_error')
+            ], 500);
         }
     }
 
@@ -77,10 +78,14 @@ class AuthController extends Controller
     {
         try {
             $request->user()->currentAccessToken()->delete();
-            return response()->json(['message' => 'Logged out']);
+            return response()->json([
+                'message' => __('messages.logout_successful')
+            ]);
         } catch (Exception $e) {
             Log::error('Logout error: ' . $e->getMessage());
-            return response()->json(['message' => 'Error during logout'], 500);
+            return response()->json([
+                'message' => __('messages.logout_error')
+            ], 500);
         }
     }
 }

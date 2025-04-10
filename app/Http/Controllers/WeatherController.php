@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\WeatherService;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
 class WeatherController extends Controller
 {
@@ -17,7 +19,20 @@ class WeatherController extends Controller
     public function getWeather(Request $request)
     {
         $request->validate(['city' => 'required|string']);
-        $data = $this->weatherService->getWeather($request->city);
-        return response()->json($data);
+
+        try {
+            $data = $this->weatherService->getWeather($request->city);
+
+            return response()->json([
+                'message' => __('messages.weather_retrieved'),
+                'data'    => $data,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error fetching weather data: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => __('messages.weather_fetch_error')
+            ], 500);
+        }
     }
 }

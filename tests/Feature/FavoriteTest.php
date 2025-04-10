@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Search;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 class FavoriteTest extends TestCase
 {
@@ -14,23 +15,28 @@ class FavoriteTest extends TestCase
     public function test_user_can_toggle_favorite()
     {
         $user = User::factory()->create();
-        $search = Search::factory()->create(['user_id' => $user->id]);
+        Sanctum::actingAs($user);
 
-        $response = $this->actingAs($user)->postJson("/api/favorites/{$search->id}/toggle");
+        $search = Search::factory()->create(['user_id' => $user->id, 'favorite' => false]);
+
+        // Marcar como favorito
+        $response = $this->postJson("/api/favorites/{$search->id}/toggle");
         $response->assertStatus(200);
 
-        $this->assertDatabaseHas('favorites', [
-            'user_id' => $user->id,
-            'search_id' => $search->id
+        $this->assertDatabaseHas('searches', [
+            'id'       => $search->id,
+            'user_id'  => $user->id,
+            'favorite' => true,
         ]);
 
-        // Toggle de nuevo para quitar de favoritos
-        $response = $this->actingAs($user)->postJson("/api/favorites/{$search->id}/toggle");
+        // Desmarcar como favorito
+        $response = $this->postJson("/api/favorites/{$search->id}/toggle");
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('favorites', [
-            'user_id' => $user->id,
-            'search_id' => $search->id
+        $this->assertDatabaseHas('searches', [
+            'id'       => $search->id,
+            'user_id'  => $user->id,
+            'favorite' => false,
         ]);
     }
 }
