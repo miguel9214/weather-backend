@@ -41,9 +41,9 @@ app/
 │   ├── Controllers/
 │   ├── Requests/
 ├── Models/
-├── Service/
-│   └── WeatherService.php
 ├── Providers/
+├── Services/
+└── WeatherService.php
 routes/
 ├── api.php
 database/
