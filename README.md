@@ -215,7 +215,7 @@ ejecutar npm i y luego npm run dev
 
 ## 👨‍💻 Autor
 
-Desarrollado por Miguel Angel Ramos Lopez como parte de una Prueba Técnica Senior Laravel para la empresa Pulpo Online.
+Desarrollado por Miguel Angel Ramos Lopez como parte de una Prueba Técnica Senior Laravel para la empresa Pulpo line.
 
 📫 Contacto: [miguel921433@gmail.com]
 
