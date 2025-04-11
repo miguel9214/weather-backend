@@ -59,7 +59,8 @@ tests/
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/miguel9214/weather-backend.git
+git clone https://github.com/miguel9214/weather-backend.git o https://gitlab.com/miguelramosdev/weather-backend.git
+          
 cd weather-backend
 ```
 
@@ -204,8 +205,10 @@ Link de repositorio
 
 Clonar
 
-https://github.com/miguel9214/weather-frontend.git
+```bash
+https://github.com/miguel9214/weather-frontend.git  o https://gitlab.com/miguelramosdev/weather-frontend.git
 
+```
 
 ejecutar npm i y luego npm run dev
 ---
